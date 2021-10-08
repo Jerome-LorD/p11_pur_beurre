@@ -91,9 +91,10 @@
                                     {{product.name|truncatechars:40}}
                                 </div>
                                 </a>
-                                {% if user.is_authenticated and product.id not in already %}
+                                {% comment %} {% if user.is_authenticated and product.id not in already %} {% endcomment %}
+                                {% if user.is_authenticated %}
                                 <div class="p_save">
-                                    <input type="checkbox" value="{{product.id}}" id="cbox" name="product"> sauvegarder
+                                    <input type="checkbox" value="{{product.id}}" id="cbox" name="product" onclick="get_substitutes()"> sauvegarder
                                 </div>
 
                                 {% csrf_token %}
@@ -130,6 +131,6 @@
         </div>
     </div>
 
-<script src="{% static 'jquery/is_favorite.js' %}"></script>
+<script src="{% static 'dist/js/scripts.js' %}"></script>
 </section>
 {% endblock %}
