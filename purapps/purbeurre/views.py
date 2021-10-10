@@ -29,31 +29,34 @@ def results(request, product_name):
     page = request.GET.get("page", 1)
     if result.first():
         product = result.first()
-        substit = product.find_substitute()
-        already = []
-        if substit is not None:
-            t = Substitutes.objects.filter(
-                product_id__in=[i.id for i in substit], user_id=request.user.id
+        substitutes = product.find_substitute()
+        substitute_already_saved = []
+        if substitutes is not None:
+            already_saved = Substitutes.objects.filter(
+                product_id__in=[item.id for item in substitutes],
+                user_id=request.user.id,
             )
-            if t:
-                [already.append(i.product_id) for i in t]
+            if already_saved:
+                [
+                    substitute_already_saved.append(item.product_id)
+                    for item in already_saved
+                ]
 
-            paginator = Paginator(substit, 16)
+            paginator = Paginator(substitutes, 16)
             try:
                 page_result = paginator.page(page)
             except PageNotAnInteger:
                 page_result = paginator.page(1)
             except EmptyPage:
                 page_result = paginator.page(paginator.num_pages)
-            # breakpoint()
             return render(
                 request,
                 "pages/results.html",
                 {
-                    "substit": substit,
+                    "substit": substitutes,
                     "product": product,
                     "page_result": page_result,
-                    "already": already,
+                    "substitute_already_saved": substitute_already_saved,
                 },
             )
 
@@ -131,40 +134,23 @@ def autocomplete(request):
 @csrf_exempt
 def save_substitutes(request):
     """Save substitutes from ajax post."""
-    # 2 types d'users avec chacun des droits en db différentz : free et premium
-    # le free a droit à 10 sauvegardes et le premium à 50.
-    # compter le nb de lignes pour un user selon ses droits.
     data = json.loads(request.body)
-    # breakpoint()
-    products = data["products"]
+    product_sel = data["products"]
     ref_product_id = data["ref_product_id"]
+    status = data["status"]
     ref_product = Product.objects.get(pk=ref_product_id)
 
-    # response = JsonResponse({"products": products})
-    arr = []
-
-    for item_id in products:
-
+    if status == "save":
         obj, created = Substitutes.objects.get_or_create(
-            product_id=item_id, reference_id=ref_product.id, user_id=request.user.id
+            product_id=product_sel, reference_id=ref_product.id, user_id=request.user.id
         )
-        # breakpoint()
-        if created:
-            saved = Product.objects.filter(id=item_id)
-            arr.append(saved[0].name)
-        else:
-            arr.append("duplicate")
+    else:
+        substitute = Substitutes.objects.get(
+            product_id=product_sel, reference_id=ref_product.id, user_id=request.user.id
+        )
+        substitute.delete()
 
-    # if tst:
-    # breakpoint()
-
-    # response = JsonResponse({"products": products})
-    return JsonResponse({"saved_substitutes": arr})
-    # return render(
-    #     request,
-    #     "pages/results.html",
-    #     {"products": products},  # , "saved_substitutes": response.content},
-    # )
+    return JsonResponse(data)
 
 
 @login_required
