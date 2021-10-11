@@ -138,17 +138,27 @@ def save_substitutes(request):
     product_sel = data["products"]
     ref_product_id = data["ref_product_id"]
     status = data["status"]
-    ref_product = Product.objects.get(pk=ref_product_id)
+    if ref_product_id:
+        ref_product = Product.objects.get(pk=ref_product_id)
 
     if status == "save":
         obj, created = Substitutes.objects.get_or_create(
             product_id=product_sel, reference_id=ref_product.id, user_id=request.user.id
         )
     else:
-        substitute = Substitutes.objects.get(
-            product_id=product_sel, reference_id=ref_product.id, user_id=request.user.id
-        )
-        substitute.delete()
+        if not ref_product_id:
+            substitute = Substitutes.objects.get(
+                product_id=product_sel, user_id=request.user.id
+            )
+
+            return JsonResponse({"reference_id": substitute.reference.id})
+        else:
+            substitute = Substitutes.objects.get(
+                product_id=product_sel,
+                reference_id=int(ref_product.id),
+                user_id=request.user.id,
+            )
+            substitute.delete()
 
     return JsonResponse(data)
 
