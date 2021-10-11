@@ -6,13 +6,13 @@
 
 
 {% block results %}
-<section class="page-section bg-moules-frites" id="page_results">
+<section class="page-section bg-moules-frites" id="page-results">
     <div class="container px-4 px-lg-5 bg-primary">
         {% if page_result or product %}    
         <div class="row gx-4 gx-lg-5 justify-content-center">
 
-            <div class="prod_rep2" style="background: url('{{product.image}}') no-repeat center; height: 200px; background-color: black;">
-            <mark class="mark_prod">{{product.name}}, nutriscore: {{product.nutriscore.type|upper}}</mark>
+            <div class="prod-rep2" style="background: url('{{product.image}}') no-repeat center; height: 200px; background-color: black;">
+            <mark class="mark-prod">{{product.name}}, nutriscore: {{product.nutriscore.type|upper}}</mark>
             </div>
 
         </div>
@@ -23,7 +23,7 @@
 
 {% block content %}
 
-<section class="page-section bg-moules-frites min_height">
+<section class="page-section bg-moules-frites min-height">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 text-center">
@@ -45,19 +45,21 @@
                      <ul class="list-inline">                      
                     {% for product in page_no_result %}
                         <li class="list-inline-item">
+                        <div id="fav-{{product.id}}">
                             <a href="{% url 'product' product.name|safe %}">
-                            <div class="pic_container">
+                            <div class="pic-container">
                                 <img src="{{ product.image }}" class="img-fluid rounded">
                             </div>
-                            <div class="p_name">
+                            <div class="p-name">
                                 {{product.name|truncatechars:40}} 
                             </div>
                             </a>
 
-                            <div class="p_save transparent">sauvegarder</div>
-
+                            <div class="p-save transparent">sauvegarder</div>
+                            <span class="nutriscore">{{product.nutriscore.type.capitalize}}</span>
+                            </div>
                         </li>
-                        <span class="nutriscore">{{product.nutriscore.type.capitalize}}</span>
+                        
                     {% endfor %}
                     </ul>
                     {% if page_no_result.has_previous %}
@@ -83,46 +85,47 @@
                     {% for product in page_result %}
                         {% if product.name != product_name %}
                             <li class="list-inline-item">
+                            <div id="fav-{{product.id}}">
                                 <a href="{% url 'product' product.name %}">
-                                <div class="pic_container">
+                                <div class="pic-container">
                                     <img src="{{ product.image }}" class="img-fluid rounded">
                                 </div>
-                                <div class="p_name">
+                                <div class="p-name">
                                     {{product.name|truncatechars:40}}
                                 </div>
                                 </a>
-                                {% comment %} {% if user.is_authenticated and product.id not in already %} {% endcomment %}
                                 {% if user.is_authenticated %}
-                                <div class="p_save">
-                                    <input type="checkbox" value="{{product.id}}" id="cbox" name="product" onclick="get_substitutes()"> sauvegarder
+                                <div class="p-save">
+                                    <label class="switch"> 
+                                    {% if product.id in substitute_already_saved %}
+                                        <input type="checkbox" name="product" value="{{product.id}}" checked>
+                                    {% else %}
+                                        <input type="checkbox" name="product" value="{{product.id}}">
+                                    {% endif %}
+                                    <div class="slider round">
+                                        <span class="rm">Ajouter</span>
+                                        <span class="add">Retirer</span>
+                                    </div>
+                                    </label>
                                 </div>
-
                                 {% csrf_token %}
 
                                 {% else %}
-                                <div class="p_save transparent">sauvegarder</div>
+                                <div class="p-save transparent">sauvegarder</div>
                                 {% endif %}
-                            </li>
                             <span class="nutriscore">{{product.nutriscore.type|upper}}</span>
+                            </div>
+                            </li>
                         {% endif %}
                     {% endfor %}
                     </ul>
                     {% if page_result.has_previous %}
                         <a  class="float-start btn btn-primary" href="?page={{ page_result.previous_page_number }}">page précédente</a>
                     {% endif %}
-
                     {% if page_result.has_next %}
                         <a class="float-end btn btn-primary" href="?page={{ page_result.next_page_number }}">page suivante</a>
                     {% endif %}                    
-
-                    {% if user.is_authenticated%}
-                        {% if page_result %}
-                            <button id="save_btn" class="btn btn-success">Sauvegarder dans les favoris</button>
-                            
-                        {% endif %}
-                        
-                    {% else %}
-
+                    {% if not user.is_authenticated%}
                         <p class="justify-content-start">Pour sauvegarder vos produits préférés dans vos favoris</p>
                          <a href="{% url 'inscript' %}"><button class="btn btn-success">S'inscrire</button></a> et / ou <a href="{% url 'login' %}"><button class="btn btn-success" >Se connecter</button></a>
                     {% endif %}
@@ -131,6 +134,6 @@
         </div>
     </div>
 
-<script src="{% static 'dist/js/scripts.js' %}"></script>
+<script src="{% static 'dist/js/get_substitutes.js' %}"></script>
 </section>
 {% endblock %}
