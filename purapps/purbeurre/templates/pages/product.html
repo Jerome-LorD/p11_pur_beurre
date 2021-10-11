@@ -6,8 +6,8 @@
 <section class="page-section bg-moules-frites">
     <div class="container px-4 px-lg-5 bg-primary">
         <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="prod_rep2" style="background: url('{{product.image}}') no-repeat center; height: 200px; background-color: black; box-shadow: 2px 0px 16px -4px aliceblue;">
-            <mark class="mark_prod">{{product.name}}</mark>
+            <div class="prod-rep2" style="background: url('{{product.image}}') no-repeat center; height: 200px; background-color: black; box-shadow: 2px 0px 16px -4px aliceblue;">
+            <mark class="mark-prod">{{product.name}}</mark>
             </div>
         </div>
     </div>
@@ -15,38 +15,39 @@
 {% endblock product %}
 
 {% block content %}
-<section class="page-section bg-moules-frites min_height">
+<section class="page-section bg-moules-frites min-height">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 text-center">
                 <div class="d-flex justify-content-between w-100">
-                    <div class="nutri_score">
+                    <div class="nutri-score">
                         <table class="nutri">
-                        <caption class="caption_nutriscore">NUTRI-SCORE</caption>
-                        <tr>               
-                        {% for letter in "abcde" %}
-                            {% if letter == product.nutriscore.type %}
-                            <td class="nutri_{{product.nutriscore.type.capitalize}}"  width="10px">
-                            {% else %}
-                            <td class="nut_{{letter}}" width="10px">
-                            {% endif %}
-                        {% endfor %}
-                        </td></tr>
+                            <caption class="caption-nutriscore">NUTRI-SCORE</caption>
+                                <tr>               
+                                {% for letter in "abcde" %}
+                                    {% if letter == product.nutriscore.type %}
+                                        <td class="nutri-{{product.nutriscore.type.capitalize}}"  width="10px">
+                                    {% else %}
+                                        <td class="nut-{{letter}}" width="10px">
+                                    {% endif %}
+                                {% endfor %}
+                                    </td>
+                                </tr>
                         </table>
                     </div>
                         <table class="table-bordered table-sm table-light text-start">
-                        <tr>
-                        <th class="bg-rooibos-chocolat">Informations nutritionnelles</th><th class="bg-rooibos-chocolat">pour 100g / 100 ml</th>
-                        </tr>
-                            {% for key, value in product.nutriments.items %}
-                            {% if key == "fat_100g" or key == "salt_100g" or key == "sodium_100g" or key == "energy_100g" or key == "energy-kcal_100g" or key == "sugars_100g" or key == "proteins_100g" or key == "carbohydrates_100g" %}
-                            <tr><td class="bg-biscuit-trempe">{{key}}</td><td class="bg-biscuit-trempe">{{value}}</td></tr>
-                            {% endif %}
-                            {% endfor %}
+                            <tr>
+                                <th class="bg-rooibos-chocolat">Informations nutritionnelles</th><th class="bg-rooibos-chocolat">pour 100g / 100 ml</th>
+                            </tr>
+                                {% for key, value in product.nutriments.items %}
+                                    {% if key == "fat_100g" or key == "salt_100g" or key == "sodium_100g" or key == "energy_100g" or key == "energy-kcal_100g" or key == "sugars_100g" or key == "proteins_100g" or key == "carbohydrates_100g" %}
+                                        <tr><td class="bg-biscuit-trempe">{{key}}</td><td class="bg-biscuit-trempe">{{value}}</td></tr>
+                                    {% endif %}
+                                {% endfor %}
                         </table>
                     </div>
                     <br>
-                    <div class="btn_fiche">
+                    <div class="btn-fiche">
                         <a class="btn btn-primary" href="{{product.url}}">Voir la fiche d'OpenFoodFacts</a>
                     </div>
                 </div>
