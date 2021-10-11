@@ -96,10 +96,8 @@
         const ajax_url = "{% url 'save_substitutes' %}";
     </script>
 
-    <script type="text/javascript" src="{% static 'dist/js/get_substitutes.js' %}"></script>
-
-
-
+    {% comment %} <script src="{% static 'dist/js/get_substitutes.js' %}"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'dist/js/rm_substitute.js' %}"></script> {% endcomment %}
 
     {% block notfound %}<!-- 404 -->{% endblock notfound %}    
     {% block results %}<!-- Results -->{% endblock results %}
@@ -115,9 +113,9 @@
     <!-- Footer-->
     {% block footer %}
         <footer class="py-5 bg-biscuit-trempe footer-bottom">
-            <div class="container px-4 px-lg-5 flex_perso">
-                <div class="col-md-6 small justify-content-start inline-flex_perso"><a href="{% url 'mentions' %}">Mentions Légales</a></div>
-                <div class="col-md-6 small justify-content-end inline-flex_perso"> Contact</div>
+            <div class="container px-4 px-lg-5 flex-perso">
+                <div class="col-md-6 small justify-content-start inline-flex-perso"><a href="{% url 'mentions' %}">Mentions Légales</a></div>
+                <div class="col-md-6 small justify-content-end inline-flex-perso"> Contact</div>
             </div>
         </footer>    
     {% endblock footer %}
