@@ -11304,13 +11304,12 @@ a.results {
   padding: 8rem 0;
   padding-top: 10rem;
   padding-bottom: calc(10rem - 4.5rem);
-  background: url("dist/assets/img/ratatouille-11.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
 }
 
-.min_height {
+.min-height {
   min-height: 60%;
 }
 
@@ -11318,7 +11317,7 @@ a.results {
   padding: 20px 0px 0px 0px !important;
 }
 
-.pic_container {
+.pic-container {
   width: 150px;
   height: 200px;
   background-color: #c45525;
@@ -11330,7 +11329,7 @@ a.results {
   align-content: center;
 }
 
-.p_name {
+.p-name {
   background-color: #8c492b;
   text-align: left;
   padding: 5px 5px;
@@ -11342,14 +11341,12 @@ a.results {
   z-index: 3;
 }
 
-.p_save {
+.p-save {
   background-color: #8c492b;
-  text-align: left;
   padding: 5px 5px;
   border-bottom: 1px solid bisque;
   border-left: 1px solid bisque;
   border-right: 1px solid bisque;
-  color: white;
   margin-bottom: 30px;
 }
 
@@ -11357,21 +11354,21 @@ a.results {
   background-color: #20262e;
   color: #fff;
   position: relative;
-  right: 20px;
-  top: -300px;
+  right: -75px;
+  top: -365px;
   height: 25px;
   width: 25px;
   border-radius: 50%;
   display: inline-block;
 }
 
-.origin_center {
+.origin-center {
   /* position: relative;
     left: 40%; */
   display: inline flow-root list-item;
 }
 
-.nutri_center {
+.nutri-center {
   background-color: #20262e;
   color: #fff;
   height: 25px;
@@ -11384,7 +11381,7 @@ a.results {
   text-align: center;
 }
 
-a.p_ref {
+a.p-ref {
   position: relative;
   color: #000;
   background-color: aliceblue;
@@ -11394,7 +11391,7 @@ a.p_ref {
   font-size: 0.8em;
 }
 
-a.p_ref:hover span {
+a.p-ref:hover span {
   display: block;
   position: absolute;
   left: -1px;
@@ -11405,17 +11402,17 @@ a.p_ref:hover span {
   border-radius: 5px;
 }
 
-.p_name a.p_ref span {
+.p-name a.p-ref span {
   line-height: 0px;
 }
 
-.p_name a.p_ref:hover span {
+.p-name a.p-ref:hover span {
   line-height: 1.3em;
   background-color: #bfbfbf;
   width: 140px;
 }
 
-a.p_ref span {
+a.p-ref span {
   display: none;
 }
 
@@ -11424,7 +11421,7 @@ a.p_ref span {
   visibility: hidden;
 }
 
-.btn_fiche {
+.btn-fiche {
   margin-top: 35%;
 }
 
@@ -11442,7 +11439,7 @@ a.p_ref span {
   padding: 5px;
 }
 
-.prod_rep2 {
+.prod-rep2 {
   text-align: center;
   display: grid;
   align-content: center;
@@ -11450,7 +11447,7 @@ a.p_ref span {
   background-color: #c45525;
 }
 
-.mark_prod {
+.mark-prod {
   background-color: #979797;
   font-size: 1em;
   font-weight: lighter;
@@ -11458,7 +11455,7 @@ a.p_ref span {
   margin: 0 auto;
 }
 
-.nutri_score {
+.nutri-score {
   background-color: white;
   font-size: 1.5em;
   padding: 5px 10px;
@@ -11468,7 +11465,7 @@ a.p_ref span {
   height: 85px;
 }
 
-.caption_nutriscore {
+.caption-nutriscore {
   color: #6c757d;
   text-align: left;
   caption-side: top;
@@ -11483,7 +11480,7 @@ a.p_ref span {
   border-collapse: inherit;
 }
 
-.nut_a::before {
+.nut-a::before {
   content: "A";
   color: white;
   font-size: 0.7em;
@@ -11492,7 +11489,7 @@ a.p_ref span {
   padding: 1px 3px 5px 3px;
 }
 
-.nut_b::before {
+.nut-b::before {
   content: "B";
   color: white;
   font-size: 0.7em;
@@ -11501,7 +11498,7 @@ a.p_ref span {
   padding: 1px 3px 5px 3px;
 }
 
-.nut_c::before {
+.nut-c::before {
   content: "C";
   color: white;
   font-size: 0.7em;
@@ -11510,7 +11507,7 @@ a.p_ref span {
   padding: 1px 3px 5px 3px;
 }
 
-.nut_d::before {
+.nut-d::before {
   content: "D";
   color: white;
   font-size: 0.7em;
@@ -11519,7 +11516,7 @@ a.p_ref span {
   padding: 1px 3px 5px 3px;
 }
 
-.nut_e::before {
+.nut-e::before {
   content: "E";
   color: white;
   font-size: 0.7em;
@@ -11528,7 +11525,7 @@ a.p_ref span {
   padding: 1px 3px 5px 3px;
 }
 
-.nutri_A::before {
+.nutri-A::before {
   content: "A";
   font-size: 1.2em;
   color: white;
@@ -11537,7 +11534,7 @@ a.p_ref span {
   padding: 5px 3px 5px 3px;
 }
 
-.nutri_B::before {
+.nutri-B::before {
   content: "B";
   font-size: 1.2em;
   color: white;
@@ -11546,7 +11543,7 @@ a.p_ref span {
   padding: 5px 3px 5px 3px;
 }
 
-.nutri_C::before {
+.nutri-C::before {
   content: "C";
   font-size: 1.2em;
   color: white;
@@ -11555,7 +11552,7 @@ a.p_ref span {
   padding: 5px 3px 5px 3px;
 }
 
-.nutri_D::before {
+.nutri-D::before {
   content: "D";
   font-size: 1.2em;
   color: white;
@@ -11564,7 +11561,7 @@ a.p_ref span {
   padding: 5px 3px 5px 3px;
 }
 
-.nutri_E::before {
+.nutri-E::before {
   content: "E";
   font-size: 1.2em;
   color: white;
@@ -11573,12 +11570,113 @@ a.p_ref span {
   padding: 5px 3px 5px 3px;
 }
 
-.flex_perso {
+.flex-perso {
   display: flex;
 }
 
-.inline-flex_perso {
+.inline-flex-perso {
   display: inline-flex;
+}
+
+.confirm-substitutes-saved {
+  background-color: #ae9f4d6e;
+  color: chartreuse;
+  width: 100px;
+  float: right;
+  border-radius: 10px;
+}
+
+#conf {
+  background-color: green;
+  width: 150px;
+  height: 150px;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 130px;
+  height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #5e1717;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #c45525;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #178a17;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(110px);
+}
+
+.add {
+  display: none;
+}
+
+.add,
+.rm {
+  color: white;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  font-size: 13px;
+  font-family: Open Sans;
+}
+
+input:checked + .slider .add {
+  display: block;
+}
+
+input:checked + .slider .rm {
+  display: none;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 12px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+div[id*=fav-] {
+  margin-right: 20px;
+  color: green;
 }
 
 .btn-xl {
