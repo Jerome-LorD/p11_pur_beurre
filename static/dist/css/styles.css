@@ -11279,6 +11279,46 @@ body {
   padding: 8rem 0;
 }
 
+.overlay {
+  position: fixed;
+  top: 150px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #cac6c6;
+  border-radius: 10px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+  border: 10px solid aliceblue;
+  box-shadow: 0px 0px 7px 2px #000;
+}
+
+.popup .exit {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  transition: all 200ms;
+  font-size: larger;
+  font-weight: bold;
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+
+.popup .content {
+  max-height: 30%;
+  text-align: left;
+  overflow: auto;
+}
+
 .bg-rooibos-chocolat {
   background-color: var(--bs-rooibos-chocolat);
 }
@@ -11337,8 +11377,6 @@ a.results {
   height: 5em;
   border: 1px solid bisque;
   color: white;
-  position: relative;
-  z-index: 3;
 }
 
 .p-save {
@@ -11363,8 +11401,6 @@ a.results {
 }
 
 .origin-center {
-  /* position: relative;
-    left: 40%; */
   display: inline flow-root list-item;
 }
 
@@ -11677,6 +11713,11 @@ input:checked + .slider .rm {
 div[id*=fav-] {
   margin-right: 20px;
   color: green;
+}
+
+#gift-proposed {
+  margin: 30px 0 0 0;
+  display: block;
 }
 
 .btn-xl {
