@@ -19,4 +19,5 @@ urlpatterns = [
         name="user_logout",
     ),
     path("accounts/profile/", views.user_profile, name="profile"),
+    path("ajax_premium/", views.premium, name="premium"),
 ]
