@@ -1,27 +1,53 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Mon compte -- Pur beurre{% endblock title %}
 
 {% block profile %}
-
-        <header class="masthead">
-            <div class="container px-4 px-lg-5 h-100">
-                <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
-                    <div class="col-lg-8 align-self-end">
-                        <h1 class="text-white font-weight-bold">Mon compte</h1>
-                        <hr class="divider" />
-                    </div>
-                    <div class="col-lg-8 align-self-baseline">
-                   
-                   {% if request.user.is_authenticated %}Bonjour {{ user.username }} 
-                   {% else %}<a href="{% url django.contrib.auth.login %}">Login</a>{% endif %}
-                   <p>Ton email : {{ user.email }} </p>
-
-                    </div>
-                    </div>
-                    </form>
-                    </div>
-                </div>
+<section class="page-section bg-moules-frites">
+    <div class="container px-4 px-lg-5 bg-primary">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="prod-rep2" style="background-color: black; height: 200px; color: white;">
+                <h3>Mon compte : 
+                {% if request.user.is_authenticated %}
+                {{ user.username }}
+                {% else %}
+                   <a href="{% url django.contrib.auth.login %}">Login</a>
+                {% endif %}
+                </h3>
             </div>
-        </header>  
 
+
+        </div>
+      
+    </div>
+</section>
+{% endblock %}
+
+
+{% block content %}
+<section class="page-section bg-moules-frites min-height">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+       
+            <div class="col-lg-8 text-center">
+            <table class="table table-bordered">
+            <tr><td>Ton email</td><td>{{ user.email }}</td></tr>
+            </table>
+                {% if user.is_premium %}
+                ok premium
+                {% else %}
+                    <div class="btn-fiche">
+                    <p>En tant que membre enregistré, vous pouvez placer 10 produits en favoris.<br>
+                    Pour avoir un compte illimité, il suffit de</p>
+                        <button class="btn btn-primary" id="gift">Faire un don de 1€ symbolique</button>
+                    </div>
+                    <!-- Quand le don est fait, supprime le classe btn-fiche et affiche un trophée à la place-->
+                    <div id="gift-proposed"></div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div> 
+<script src="{% static 'dist/js/is_premium.js' %}"></script>
+</section>
 {% endblock %}
