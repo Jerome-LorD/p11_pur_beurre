@@ -19,13 +19,13 @@ async function postJsonData(url, data, headers) {
   buttons = document.querySelectorAll(".btn-outline-warning")
     .forEach((button) => {
       button.addEventListener("click", (event) => {
-        let prodbox = document.getElementById("fav-" + event.target.value)
+        let prodbox = document.getElementById("fav-" + event.target.value);
         prodbox.parentNode.removeChild(prodbox);
   
         postJsonData(ajax_url, {
             "products": event.target.value,
             "ref_product_id": "",
-            "status": "unsave"
+            "status": false
           }, {
             "Accept": "application/json",
             "Content-Type": "application/json"
@@ -35,7 +35,7 @@ async function postJsonData(url, data, headers) {
             postJsonData(ajax_url, {
               "products": event.target.value,
               "ref_product_id": reference_id,
-              "status": "unsave"
+              "status": false
             }, {
               "Accept": "application/json",
               "Content-Type": "application/json"
