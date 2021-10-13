@@ -138,27 +138,39 @@ def save_substitutes(request):
     product_sel = data["products"]
     ref_product_id = data["ref_product_id"]
     status = data["status"]
+    total_entries = Substitutes.objects.filter(user=request.user.id).count()
+
     if ref_product_id:
         ref_product = Product.objects.get(pk=ref_product_id)
+        if status and total_entries <= 9:
 
-    if status == "save":
-        obj, created = Substitutes.objects.get_or_create(
-            product_id=product_sel, reference_id=ref_product.id, user_id=request.user.id
-        )
-    else:
-        if not ref_product_id:
-            substitute = Substitutes.objects.get(
-                product_id=product_sel, user_id=request.user.id
+            obj, created = Substitutes.objects.get_or_create(
+                product_id=product_sel,
+                reference_id=ref_product.id,
+                user_id=request.user.id,
             )
-
-            return JsonResponse({"reference_id": substitute.reference.id})
-        else:
+        elif status and total_entries >= 10 and not request.user.is_premium:
+            return JsonResponse({"max_in_db_reached": True})
+        elif not status:
             substitute = Substitutes.objects.get(
                 product_id=product_sel,
                 reference_id=int(ref_product.id),
                 user_id=request.user.id,
             )
             substitute.delete()
+
+        else:
+            obj, created = Substitutes.objects.get_or_create(
+                product_id=product_sel,
+                reference_id=ref_product.id,
+                user_id=request.user.id,
+            )
+
+    elif not ref_product_id:
+        substitute = Substitutes.objects.get(
+            product_id=product_sel, user_id=request.user.id
+        )
+        return JsonResponse({"reference_id": substitute.reference.id})
 
     return JsonResponse(data)
 
