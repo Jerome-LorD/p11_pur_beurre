@@ -7,3 +7,4 @@ class User(AbstractUser):
     """Custom user."""
 
     email = models.EmailField(unique=True)
+    is_premium = models.BooleanField("premium status", default=False)
