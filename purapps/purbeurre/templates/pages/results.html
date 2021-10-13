@@ -82,25 +82,25 @@
                             <h3>Vous pouvez remplacer cet aliment par :</h3><br><br>
                         {% endif %}
                     <ul class="list-inline">
-                    {% for product in page_result %}
-                        {% if product.name != product_name %}
+                    {% for substitute in page_result %}
+                        {% if substitute.name != product_name %}
                             <li class="list-inline-item">
-                            <div id="fav-{{product.id}}">
-                                <a href="{% url 'product' product.name %}">
+                            <div id="fav-{{substitute.id}}">
+                                <a href="{% url 'product' substitute.name %}">
                                 <div class="pic-container">
-                                    <img src="{{ product.image }}" class="img-fluid rounded">
+                                    <img src="{{ substitute.image }}" class="img-fluid rounded">
                                 </div>
                                 <div class="p-name">
-                                    {{product.name|truncatechars:40}}
+                                    {{substitute.name|truncatechars:40}}
                                 </div>
                                 </a>
                                 {% if user.is_authenticated %}
                                 <div class="p-save">
                                     <label class="switch"> 
-                                    {% if product.id in substitute_already_saved %}
-                                        <input type="checkbox" name="product" value="{{product.id}}" checked>
+                                    {% if substitute.id in substitute_already_saved %}
+                                        <input type="checkbox" name="product" value="{{substitute.id}}" checked>
                                     {% else %}
-                                        <input type="checkbox" name="product" value="{{product.id}}">
+                                        <input type="checkbox" name="product" value="{{substitute.id}}">
                                     {% endif %}
                                     <div class="slider round">
                                         <span class="rm">Ajouter</span>
@@ -113,12 +113,22 @@
                                 {% else %}
                                 <div class="p-save transparent">sauvegarder</div>
                                 {% endif %}
-                            <span class="nutriscore">{{product.nutriscore.type|upper}}</span>
+                            <span class="nutriscore">{{substitute.nutriscore.type|upper}}</span>
                             </div>
                             </li>
                         {% endif %}
                     {% endfor %}
                     </ul>
+                    <div id="warn-popup" class="overlay">
+                        <div class="popup">
+                            <a class="exit">&#10060;</a>
+                            <div class="content" id="reached">
+                            Vous avez enregistré 10 substituts en favoris.<br>
+                            Le produit ne peut pas être ajouté.<br><br>                    
+                            Plus de limite pour 1€ 🙂
+                            </div>
+                        </div>
+                    </div>
                     {% if page_result.has_previous %}
                         <a  class="float-start btn btn-primary" href="?page={{ page_result.previous_page_number }}">page précédente</a>
                     {% endif %}
