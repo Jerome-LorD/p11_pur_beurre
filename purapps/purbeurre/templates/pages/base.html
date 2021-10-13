@@ -94,10 +94,12 @@
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         const autocomp_source = "{% url 'autocomplete' %}";
         const ajax_url = "{% url 'save_substitutes' %}";
+        const ajax_url_profile = "{% url 'premium' %}";
     </script>
 
     {% comment %} <script src="{% static 'dist/js/get_substitutes.js' %}"></script> {% endcomment %}
     {% comment %} <script src="{% static 'dist/js/rm_substitute.js' %}"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'dist/js/is_premium.js' %}"></script> {% endcomment %}
 
     {% block notfound %}<!-- 404 -->{% endblock notfound %}    
     {% block results %}<!-- Results -->{% endblock results %}
