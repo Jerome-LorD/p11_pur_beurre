@@ -22,7 +22,7 @@ async function postJsonData(url, data, headers) {
         let prodbox = document.getElementById("fav-" + event.target.value);
         prodbox.parentNode.removeChild(prodbox);
   
-        postJsonData(ajax_url, {
+        postJsonData(ajax_url_delete_substitutes, {
             "products": event.target.value,
             "ref_product_id": "",
             "status": false
@@ -32,7 +32,7 @@ async function postJsonData(url, data, headers) {
           })
           .then(jsonResponse => {
             let reference_id = jsonResponse.reference_id;
-            postJsonData(ajax_url, {
+            postJsonData(ajax_url_delete_substitutes, {
               "products": event.target.value,
               "ref_product_id": reference_id,
               "status": false
@@ -42,5 +42,4 @@ async function postJsonData(url, data, headers) {
             })
           })
       });
-  
     });
