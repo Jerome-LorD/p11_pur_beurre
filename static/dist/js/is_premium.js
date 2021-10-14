@@ -32,7 +32,7 @@ async function postJsonData(url, data, headers) {
 
 document.addEventListener('click', function (e) {
     if (hasClass(e.target, 'gift-confirm')) {
-        postJsonData(ajax_url_profile, {
+        postJsonData(ajax_url_premium, {
             "is_premium": true,
             }, {
             "Accept": "application/json",
