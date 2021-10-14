@@ -96,6 +96,7 @@
         const ajax_url_save_substitutes = "{% url 'save_substitutes' %}";
         const ajax_url_delete_substitutes = "{% url 'delete_substitutes' %}";
         const ajax_url_premium = "{% url 'premium' %}";
+        const current_user = '{{ user.username|capfirst }}';
     </script>
 
     {% comment %} <script src="{% static 'dist/js/get_substitutes.js' %}"></script> {% endcomment %}
