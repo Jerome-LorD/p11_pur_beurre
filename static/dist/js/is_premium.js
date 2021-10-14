@@ -38,6 +38,11 @@ document.addEventListener('click', function (e) {
             "Accept": "application/json",
             "Content-Type": "application/json"
             })
+        let h3 = document.createElement("h3");
+        let h3_text = current_user + " est premium pur beurre !";
+        let h3Content = document.createTextNode(h3_text);
+        h3.appendChild(h3Content);
+        document.querySelector("#prem").appendChild(h3);
     } 
 }, false);
 
