@@ -10,5 +10,6 @@ urlpatterns = [
     path("favorites/", views.favorites, name="favorites"),
     path("mentions/", views.mentions, name="mentions"),
     re_path(r"^autocomplete/", views.autocomplete, name="autocomplete"),
-    path("ajax/", views.save_substitutes, name="save_substitutes"),
+    path("ajax_save/", views.save_substitutes, name="save_substitutes"),
+    path("ajax_del/", views.delete_substitutes, name="delete_substitutes"),
 ]
