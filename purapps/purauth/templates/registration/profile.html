@@ -30,8 +30,9 @@
             <table class="table table-bordered">
             <tr><td class="tbl-profile">Votre email</td><td class="tbl-profile">{{ user.email }}</td></tr>
             </table>
+                <div id="prem"></div>
                 {% if user.is_premium %}
-                <h3>{{ user.username|capfirst }} est premium pur beurre !</h3>
+                <div id="premium"><h3>{{ user.username|capfirst }} est premium pur beurre !</h3></div>
                 {% else %}
                     <div class="btn-fiche">
                     <p>En tant que membre enregistré, vous pouvez placer 10 produits en favoris.<br>
