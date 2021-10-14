@@ -131,50 +131,6 @@ def autocomplete(request):
     return JsonResponse([{"name": item.name} for item in products], safe=False)
 
 
-@csrf_exempt
-def save_substitutes(request):
-    """Save substitutes from ajax post."""
-    data = json.loads(request.body)
-    product_sel = data["products"]
-    ref_product_id = data["ref_product_id"]
-    status = data["status"]
-    total_entries = Substitutes.objects.filter(user=request.user.id).count()
-
-    if ref_product_id:
-        ref_product = Product.objects.get(pk=ref_product_id)
-        if status and total_entries <= 9:
-
-            obj, created = Substitutes.objects.get_or_create(
-                product_id=product_sel,
-                reference_id=ref_product.id,
-                user_id=request.user.id,
-            )
-        elif status and total_entries >= 10 and not request.user.is_premium:
-            return JsonResponse({"max_in_db_reached": True})
-        elif not status:
-            substitute = Substitutes.objects.get(
-                product_id=product_sel,
-                reference_id=int(ref_product.id),
-                user_id=request.user.id,
-            )
-            substitute.delete()
-
-        else:
-            obj, created = Substitutes.objects.get_or_create(
-                product_id=product_sel,
-                reference_id=ref_product.id,
-                user_id=request.user.id,
-            )
-
-    elif not ref_product_id:
-        substitute = Substitutes.objects.get(
-            product_id=product_sel, user_id=request.user.id
-        )
-        return JsonResponse({"reference_id": substitute.reference.id})
-
-    return JsonResponse(data)
-
-
 @login_required
 def favorites(request):
     """Retrieve favorites."""
@@ -185,3 +141,67 @@ def favorites(request):
         "pages/favorites.html",
         {"products": products},
     )
+
+
+@csrf_exempt
+def save_substitutes(request):
+    """Save substitutes from ajax post."""
+    data = json.loads(request.body)
+    product_sel = data["products"]
+    ref_product_id = data["ref_product_id"]
+    status = data["status"]
+
+    total_entries = Substitutes.objects.filter(user=request.user.id).count()
+
+    prod_inst = Product.objects.filter(pk=product_sel)
+    prod_inst = prod_inst.first()
+
+    substitute = Substitutes()
+
+    if ref_product_id:
+        ref_product = Product.objects.get(pk=ref_product_id)
+
+        if status and total_entries <= 9:
+
+            substitute.save_sub(
+                prod_inst=prod_inst,
+                ref_product=ref_product,
+                user=request.user.id,
+            )
+
+        elif status and total_entries >= 10 and not request.user.is_premium:
+            return JsonResponse({"max_in_db_reached": True})
+
+        else:
+            substitute.save_sub(
+                prod_inst=prod_inst,
+                ref_product=ref_product,
+                user=request.user.id,
+            )
+
+    return JsonResponse(data)
+
+
+@csrf_exempt
+def delete_substitutes(request):
+    """Delete substitute from ajax post."""
+    data = json.loads(request.body)
+
+    product_sel = data["products"]
+    ref_product_id = data["ref_product_id"]
+    status = data["status"]
+
+    substitutes = Substitutes.objects.filter(user_id=request.user)
+    substitute = substitutes.first()
+
+    if ref_product_id:
+        ref_product = Product.objects.get(pk=ref_product_id)
+        substitute.delete_sub(product_sel, ref_product, status)
+
+    else:
+        substitute = Substitutes.objects.get(
+            product_id=product_sel, user_id=request.user.id
+        )
+        return JsonResponse({"reference_id": substitute.reference.id})
+
+    return JsonResponse(data)
