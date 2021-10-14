@@ -11720,6 +11720,29 @@ div[id*=fav-] {
   display: block;
 }
 
+.img-fluid-perso {
+  max-width: 30vw;
+}
+
+td.tbl-profile {
+  background-color: honeydew;
+}
+
+@media (min-width: 992px) {
+  #mainNav .navbar-nav .nav-item .nav-link:hover {
+    color: #fff;
+  }
+
+  .nav-item {
+    align-self: center !important;
+  }
+}
+@media (max-width: 768px) {
+  .col-md-6 {
+    flex: 0 auto;
+    width: 50%;
+  }
+}
 .btn-xl {
   padding: 1.25rem 2.25rem;
   font-size: 0.85rem;
