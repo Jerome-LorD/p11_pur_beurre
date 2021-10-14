@@ -3,6 +3,10 @@
 from django.db import models
 from django.db.models import Count
 from django.conf import settings
+from django.contrib.auth import get_user_model
+
+
+UserModel = get_user_model()
 
 
 class Nutriscore(models.Model):
@@ -45,11 +49,6 @@ class Product(models.Model):
         return f"{self.id} - {self.name} - {self.brand} - {self.url}\
  - {self.nutriscore} - {self.image} - {self.nutriments}"
 
-    # class Meta:
-    #     constraints = [
-    #         models.UniqueConstraint(fields=["name", "url"], name="user_url_unique")
-    #     ]
-
     def find_substitute(self):
         """Find a substitute."""
         categories_id = self.categories.values("id")
@@ -79,6 +78,15 @@ class Product(models.Model):
             return substitute
 
 
+class SubstitutesManager(models.Manager):
+    """SubstitutesManager class."""
+
+    def create_substitute(self, user, product, reference):
+        """Create substitute."""
+        substitute = self.create(user_id=user, product=product, reference=reference)
+        return substitute
+
+
 class Substitutes(models.Model):
     """Create substitutes table."""
 
@@ -96,3 +104,28 @@ class Substitutes(models.Model):
     reference = models.ForeignKey(
         Product, related_name="reference", default="", on_delete=models.CASCADE
     )
+
+    objects = SubstitutesManager()
+
+    def __str__(self) -> str:
+        """Return str representation."""
+        return f"{self.user} - {self.product} - {self.reference}"
+
+    def save_sub(self, prod_inst, ref_product, user):
+        """Save substitute in favorites."""
+        substitute = Substitutes.objects.create_substitute(user, prod_inst, ref_product)
+        return substitute
+
+    def delete_sub(self, product_sel, ref_product_id, status):
+        """Delete substitute from favorites."""
+        self.product_sel = product_sel
+        self.ref_product = ref_product_id
+
+        if not status:
+            substitute = Substitutes.objects.get(
+                product_id=int(self.product_sel),
+                reference_id=self.ref_product.id,
+                user_id=self.user.id,
+            )
+            substitute.delete()
+        return status
