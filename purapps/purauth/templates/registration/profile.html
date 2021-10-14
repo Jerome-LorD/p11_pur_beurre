@@ -9,16 +9,13 @@
             <div class="prod-rep2" style="background-color: black; height: 200px; color: white;">
                 <h3>Mon compte : 
                 {% if request.user.is_authenticated %}
-                {{ user.username }}
+                {{ user.username|capfirst }}
                 {% else %}
                    <a href="{% url django.contrib.auth.login %}">Login</a>
                 {% endif %}
                 </h3>
             </div>
-
-
         </div>
-      
     </div>
 </section>
 {% endblock %}
@@ -31,20 +28,18 @@
        
             <div class="col-lg-8 text-center">
             <table class="table table-bordered">
-            <tr><td>Ton email</td><td>{{ user.email }}</td></tr>
+            <tr><td class="tbl-profile">Votre email</td><td class="tbl-profile">{{ user.email }}</td></tr>
             </table>
                 {% if user.is_premium %}
-                ok premium
+                <h3>{{ user.username|capfirst }} est premium pur beurre !</h3>
                 {% else %}
                     <div class="btn-fiche">
                     <p>En tant que membre enregistré, vous pouvez placer 10 produits en favoris.<br>
                     Pour avoir un compte illimité, il suffit de</p>
                         <button class="btn btn-primary" id="gift">Faire un don de 1€ symbolique</button>
                     </div>
-                    <!-- Quand le don est fait, supprime le classe btn-fiche et affiche un trophée à la place-->
                     <div id="gift-proposed"></div>
                 {% endif %}
-
             </div>
         </div>
     </div> 
