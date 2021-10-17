@@ -37,10 +37,10 @@ class FillDbTestCase(TestCase):
                 "image_small_url": "http image B",
                 "nutriments": {"blo_100g": "blo"},
                 "url": "http B",
-                "nutriscore_grade": "c",
+                "nutriscore_grade": "a",
                 "categories": (
                     "Chocolat, Tablette de chocolat, Tablette de chocolat noir,\
-                                Tablette de chocolat noir sans suvres"
+                                Tablette de chocolat noir sans sucres"
                 ),
             },
             {
@@ -53,6 +53,102 @@ class FillDbTestCase(TestCase):
                 "categories": (
                     "Biscuit, Biscuit au chocolat, Biscuit au chocolat\
                             au lait"
+                ),
+            },
+            {
+                "product_name_fr": "Chocolat bio plus",
+                "brands": "Cote d'Or",
+                "image_small_url": "http://www.chocolat-bio-plus",
+                "nutriments": {"bli_100g": "bli"},
+                "url": "http://urltest.chocolat-bio-plus",
+                "nutriscore_grade": "d",
+                "categories": (
+                    "Chocolat, Tablette de chocolat,\
+                     Tablette de chocolat noir"
+                ),
+            },
+            {
+                "product_name_fr": "Chocolat noir sans sucres au top",
+                "brands": "Gerblé",
+                "image_small_url": "http image B",
+                "nutriments": {"blo_100g": "blo"},
+                "url": "http V",
+                "nutriscore_grade": "b",
+                "categories": (
+                    "Chocolat, Tablette de chocolat, Tablette de chocolat noir,\
+                                Tablette de chocolat noir sans sucres"
+                ),
+            },
+            {
+                "product_name_fr": "Milka choco Moooo très mou",
+                "brands": "Milka",
+                "image_small_url": "http image C",
+                "nutriments": {"blu_100g": "blu"},
+                "url": "http W",
+                "nutriscore_grade": "e",
+                "categories": (
+                    "Biscuit, Biscuit au chocolat, Biscuit au chocolat\
+                            au lait"
+                ),
+            },
+            {
+                "product_name_fr": "Chocolat pabio",
+                "brands": "Cote d'Or",
+                "image_small_url": "http://www.chocolat-pabio",
+                "nutriments": {"bli_100g": "bli"},
+                "url": "http://urltest.chocolat-pabio",
+                "nutriscore_grade": "d",
+                "categories": (
+                    "Chocolat, Tablette de chocolat,\
+                     Tablette de chocolat noir"
+                ),
+            },
+            {
+                "product_name_fr": "Chocolat noir sans sel",
+                "brands": "Gerblé",
+                "image_small_url": "http image B",
+                "nutriments": {"blo_100g": "blo"},
+                "url": "http X",
+                "nutriscore_grade": "c",
+                "categories": (
+                    "Chocolat, Tablette de chocolat, Tablette de chocolat noir,\
+                                Tablette de chocolat noir sans sucres"
+                ),
+            },
+            {
+                "product_name_fr": "Milka choco Moooolu",
+                "brands": "Milka",
+                "image_small_url": "http image C",
+                "nutriments": {"blu_100g": "blu"},
+                "url": "http Y",
+                "nutriscore_grade": "e",
+                "categories": (
+                    "Biscuit, Biscuit au chocolat, Biscuit au chocolat\
+                            au lait"
+                ),
+            },
+            {
+                "product_name_fr": "Chocolat bioman",
+                "brands": "Cote d'Or",
+                "image_small_url": "http://www.chocolat-bio",
+                "nutriments": {"bli_100g": "bli"},
+                "url": "http://urltest.chocolat-bioman",
+                "nutriscore_grade": "d",
+                "categories": (
+                    "Chocolat, Tablette de chocolat,\
+                     Tablette de chocolat noir"
+                ),
+            },
+            {
+                "product_name_fr": "Chocolat noir sans chocolat",
+                "brands": "Gerblé",
+                "image_small_url": "http image B",
+                "nutriments": {"blo_100g": "blo"},
+                "url": "http Z",
+                "nutriscore_grade": "c",
+                "categories": (
+                    "Chocolat, Tablette de chocolat, Tablette de chocolat noir,\
+                                Tablette de chocolat noir sans sucres"
                 ),
             },
         ]
@@ -112,12 +208,21 @@ class FindSubstitutesTestCase(FillDbTestCase):
         So, the substitute is "Chocolat noir sans sucres" because it has a better
         nutriscore (C).
         """
-        result = Product.objects.filter(name__iregex=r"^%s$" % "Chocolat bio")
-        self.product = result.first()
-        substit = self.product.find_substitute()
-        if substit is not None:
-            substit = substit.first()
-            self.assertEqual(substit.name, "Chocolat noir sans sucres")
+        reference = Product.objects.filter(name__iregex=r"^%s$" % "Chocolat bio")
+        reference = reference.first()
+        substitute = reference.find_substitute()
+        if substitute is not None:
+            substitute = substitute.first()
+            self.assertEqual(substitute.name, "Chocolat noir sans sucres")
+
+    def test_find_substitute_nutriscore_less_than_reference_nutriscore(self):
+        """Test find substitute with nutriscore less than reference nutriscore."""
+        reference = Product.objects.filter(name__iregex=r"^%s$" % "Chocolat bio")
+        reference = reference.first()
+        substitute = reference.find_substitute()
+        if substitute is not None:
+            substitute = substitute.first()
+            self.assertLess(substitute.nutriscore.type, reference.nutriscore.type)
 
 
 class FavoritesTestCase(FillDbTestCase):
@@ -129,11 +234,8 @@ class FavoritesTestCase(FillDbTestCase):
 
         self.client = Client()
 
-        product = Product.objects.get(name="Chocolat bio")
-        substitute = Product.objects.get(name="Chocolat noir sans sucres")
-        Substitutes.objects.create(
-            reference=product, product=substitute, user=self.user
-        )
+        self.reference = Product.objects.get(name="Chocolat bio")
+        self.substitute = Product.objects.get(name="Chocolat noir sans sucres")
 
     def test_favorites_status_code_200(self):
         """Test favoris status_code 200."""
@@ -144,17 +246,51 @@ class FavoritesTestCase(FillDbTestCase):
     def test_favorites_per_user(self):
         """Test favoris per user."""
         self.client.force_login(self.user)
-        res = Substitutes.objects.filter(user=self.user).first()
 
-        self.assertEqual(res.product.name, "Chocolat noir sans sucres")
+        Substitutes.objects.create(
+            product_id=self.substitute.id,
+            reference_id=self.reference.id,
+            user=self.user,
+        )
+
+        substitute = Substitutes.objects.filter(user=self.user).first()
+
+        self.assertEqual(substitute.product.name, "Chocolat noir sans sucres")
 
     def test_favorites_page(self):
         """Test favorites page."""
         self.client.force_login(self.user)
-        response = self.client.get("/favorites/")
-        products = response.context["products"]
 
-        self.assertIn(1, [product.id for product in products])
+        Substitutes.objects.create(
+            product_id=self.substitute.id,
+            reference_id=self.reference.id,
+            user=self.user,
+        )
+
+        response = self.client.get("/favorites/")
+        products = response.context["favorite"]
+
+        self.assertIn(2, [product.id for product in products])
+
+    def test_delete_substitute(self):
+        """Test delete a substitute from favorite page."""
+        self.client.force_login(self.user)
+        response = self.client.get("/favorites/")
+        products = response.context["favorite"]
+
+        Substitutes.objects.create(
+            product_id=self.substitute.id,
+            reference_id=self.reference.id,
+            user=self.user,
+        )
+
+        Substitutes.objects.get(
+            product_id=self.substitute.id,
+            reference_id=self.reference.id,
+            user=self.user,
+        ).delete()
+
+        self.assertNotIn(2, [product.id for product in products])
 
 
 class ProductDetailsTestCase(FillDbTestCase):
@@ -240,6 +376,8 @@ class ResultsTestCase(FillDbTestCase):
         """Make Setup."""
         super().setUp()
 
+        self.user.is_premium = False
+
     def test_results_status_code_200(self):
         """Test results status_code 200."""
         response = self.client.get("/results/Chocolat bio/")
@@ -249,3 +387,37 @@ class ResultsTestCase(FillDbTestCase):
         """Test results if product is None."""
         self.product = Product.objects.filter(name__iregex=r"^%s$" % "bretelle").first()
         self.assertIsNone(self.product, msg=None)
+
+    def test_create_more_than_10_favorites_for_free_user(self):
+        """Test create more than 10 favorites for an premium user."""
+        self.client.force_login(self.user)
+
+        products = Product.objects.all()
+        product_ids = [i.id for i in products]
+        for product_id in product_ids:
+            Substitutes.objects.create(
+                product_id=product_id,
+                reference_id=product_ids[-1],
+                user=self.user,
+            )
+
+        user_entries = Substitutes.objects.get_user_substitutes(self.user)
+        self.assertEqual(user_entries, 10)
+
+    def test_create_more_than_10_favorites_for_premium_user(self):
+        """Test create more than 10 favorites for an premium user."""
+        self.client.force_login(self.user)
+        self.user.is_premium = True
+
+        products = Product.objects.all()
+        product_ids = [i.id for i in products]
+
+        for product_id in product_ids:
+            Substitutes.objects.create(
+                product_id=product_id,
+                reference_id=product_ids[-1],
+                user=self.user,
+            )
+
+        user_entries = Substitutes.objects.get_user_substitutes(self.user)
+        self.assertGreater(user_entries, 10)
