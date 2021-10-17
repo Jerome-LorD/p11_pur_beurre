@@ -1,7 +1,3 @@
-/*
-save and/or remove substitute from results page.
-*/
-
 async function postJsonData(url, data, headers) {
     try {
       const response = await fetch(url, {
@@ -23,16 +19,16 @@ async function postJsonData(url, data, headers) {
       e.preventDefault();
       if (checkbox.checked == true) {
         postJsonData(ajax_url_save_substitutes, {
-          "products": checkbox.value,
-          "ref_product_id": ref_product_id,
-          "status": true
+          "product_id": checkbox.value,
+          "reference_id": reference_id,
         }, {
           "Accept": "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken
         })
         .then(jsonResponse => {
-            let max_in_db_reached = jsonResponse.max_in_db_reached;
-            if (max_in_db_reached == true) {
+            let is_max_in_db_reached = jsonResponse.is_max_in_db_reached;
+            if (is_max_in_db_reached == true) {
                 let overlay = document.getElementById('warn-popup');
                 checkbox.checked = false;
                 overlay.style.visibility='visible';
@@ -41,12 +37,12 @@ async function postJsonData(url, data, headers) {
         })
       } else {
         postJsonData(ajax_url_delete_substitutes, {
-          "products": checkbox.value,
-          "ref_product_id": ref_product_id,
-          "status": false
+          "product_id": checkbox.value,
+          "reference_id": reference_id,
         }, {
           "Accept": "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken
         })
       }
     })
