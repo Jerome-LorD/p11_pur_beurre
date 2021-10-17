@@ -36,7 +36,8 @@ document.addEventListener('click', function (e) {
             "is_premium": true,
             }, {
             "Accept": "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
             })
         let h3 = document.createElement("h3");
         let h3_text = current_user + " est premium pur beurre !";
