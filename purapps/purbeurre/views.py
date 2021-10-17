@@ -1,11 +1,11 @@
 """Purbeurre views module."""
 
 import json
-from django.http.response import Http404, JsonResponse
+from django.http.response import Http404, JsonResponse, HttpResponse
 from django.shortcuts import render
 from purapps.purbeurre.models import Product, Substitutes
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 
 
@@ -134,74 +134,64 @@ def autocomplete(request):
 @login_required
 def favorites(request):
     """Retrieve favorites."""
-    products = Substitutes.objects.filter(user=request.user)
+    substitutes = Substitutes.objects.filter(user=request.user)
+
+    page = request.GET.get("page", 1)
+    paginator = Paginator(substitutes, 12)
+
+    try:
+        favorite = paginator.page(page)
+    except PageNotAnInteger:
+        favorite = paginator.page(1)
+    except EmptyPage:
+        favorite = paginator.page(paginator.num_pages)
 
     return render(
         request,
         "pages/favorites.html",
-        {"products": products},
+        {"favorite": favorite},
     )
 
 
-@csrf_exempt
-def save_substitutes(request):
-    """Save substitutes from ajax post."""
+@csrf_protect
+def save_substitute(request):
+    """Save substitute from ajax post."""
     data = json.loads(request.body)
-    product_sel = data["products"]
-    ref_product_id = data["ref_product_id"]
-    status = data["status"]
+    product_id = data["product_id"]
+    reference_id = data["reference_id"]
 
-    total_entries = Substitutes.objects.filter(user=request.user.id).count()
-
-    prod_inst = Product.objects.filter(pk=product_sel)
-    prod_inst = prod_inst.first()
-
-    substitute = Substitutes()
-
-    if ref_product_id:
-        ref_product = Product.objects.get(pk=ref_product_id)
-
-        if status and total_entries <= 9:
-
-            substitute.save_sub(
-                prod_inst=prod_inst,
-                ref_product=ref_product,
-                user=request.user.id,
-            )
-
-        elif status and total_entries >= 10 and not request.user.is_premium:
-            return JsonResponse({"max_in_db_reached": True})
-
-        else:
-            substitute.save_sub(
-                prod_inst=prod_inst,
-                ref_product=ref_product,
-                user=request.user.id,
-            )
-
-    return JsonResponse(data)
+    created = Substitutes.objects.create(
+        product_id=product_id,
+        reference_id=reference_id,
+        user=request.user,
+    )
+    if created is None:
+        return JsonResponse({"is_max_in_db_reached": True})
+    else:
+        return JsonResponse({"is_max_in_db_reached": False})
 
 
-@csrf_exempt
-def delete_substitutes(request):
+@csrf_protect
+def delete_substitute(request):
     """Delete substitute from ajax post."""
     data = json.loads(request.body)
+    product_id = data["product_id"]
+    reference_id = data["reference_id"]
 
-    product_sel = data["products"]
-    ref_product_id = data["ref_product_id"]
-    status = data["status"]
+    Substitutes.objects.get(
+        product_id=product_id,
+        reference_id=reference_id,
+        user=request.user,
+    ).delete()
 
-    substitutes = Substitutes.objects.filter(user_id=request.user)
-    substitute = substitutes.first()
+    return HttpResponse(status=201)
 
-    if ref_product_id:
-        ref_product = Product.objects.get(pk=ref_product_id)
-        substitute.delete_sub(product_sel, ref_product, status)
 
-    else:
-        substitute = Substitutes.objects.get(
-            product_id=product_sel, user_id=request.user.id
-        )
-        return JsonResponse({"reference_id": substitute.reference.id})
+@csrf_protect
+def get_reference_id(request):
+    """Get reference id."""
+    data = json.loads(request.body)
+    product_id = data["product_id"]
+    substitute = Substitutes.objects.get(product_id=product_id, user_id=request.user.id)
 
-    return JsonResponse(data)
+    return JsonResponse({"reference_id": substitute.reference.id})
