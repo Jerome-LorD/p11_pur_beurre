@@ -45,8 +45,6 @@
 
                     <script src="{% static 'dist/js/autocomplete.js' %}"></script>
 
-
-
                     <form method="post" class="d-flex nav-link">
                     {% csrf_token %}
                     {{ request.search_form.as_ul }}                    
@@ -90,13 +88,31 @@
     {% endblock nav %}
     
     <script type="text/javascript">
-        const ref_product_id = '{{product.id}}';
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+        const ajax_url_get_reference = "{% url 'get_reference_id' %}";    
+        const reference_id = '{{product.id}}';
         const autocomp_source = "{% url 'autocomplete' %}";
-        const ajax_url_save_substitutes = "{% url 'save_substitutes' %}";
-        const ajax_url_delete_substitutes = "{% url 'delete_substitutes' %}";
+        const ajax_url_save_substitutes = "{% url 'save_substitute' %}";
+        const ajax_url_delete_substitutes = "{% url 'delete_substitute' %}";
+
         const ajax_url_premium = "{% url 'premium' %}";
         const current_user = '{{ user.username|capfirst }}';
+        {% comment %} const csrftoken = Cookies.get('csrftoken'); {% endcomment %}
     </script>
 
     {% comment %} <script src="{% static 'dist/js/get_substitutes.js' %}"></script> {% endcomment %}
