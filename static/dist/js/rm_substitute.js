@@ -1,7 +1,3 @@
-/*
-Remove substitute from favorite page.
-*/
-
 async function postJsonData(url, data, headers) {
     try {
       const response = await fetch(url, {
@@ -22,23 +18,23 @@ async function postJsonData(url, data, headers) {
         let prodbox = document.getElementById("fav-" + event.target.value);
         prodbox.parentNode.removeChild(prodbox);
   
-        postJsonData(ajax_url_delete_substitutes, {
-            "products": event.target.value,
-            "ref_product_id": "",
-            "status": false
+        postJsonData(ajax_url_get_reference, {
+            "product_id": event.target.value,
+            "reference_id": ""
           }, {
             "Accept": "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
           })
           .then(jsonResponse => {
             let reference_id = jsonResponse.reference_id;
             postJsonData(ajax_url_delete_substitutes, {
-              "products": event.target.value,
-              "ref_product_id": reference_id,
-              "status": false
+              "product_id": event.target.value,
+              "reference_id": reference_id
             }, {
               "Accept": "application/json",
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrftoken
             })
           })
       });
