@@ -58,7 +58,7 @@ class Product(models.Model):
             .annotate(tot=Count("id", distinct=True))
             .order_by("tot")
         )
-        if len(sorted_categories) > 1:
+        if len(sorted_categories) >= 1:
             offset = 0
             substitute = None
 
@@ -74,17 +74,31 @@ class Product(models.Model):
                     offset_limit = 3
                 offset_limit = 2
                 if offset == offset_limit and not substitute:
-                    return None
+                    best_cat = sorted_categories[offset + 1].get("categories__id")
+                    substitute = Product.objects.filter(
+                        categories__id=best_cat,
+                        nutriscore__type__lt=self.nutriscore.type,
+                    ).order_by("nutriscore__type")
+
             return substitute
 
 
 class SubstitutesManager(models.Manager):
     """SubstitutesManager class."""
 
-    def create_substitute(self, user, product, reference):
+    def create(self, *args, **kwargs):
         """Create substitute."""
-        substitute = self.create(user_id=user, product=product, reference=reference)
-        return substitute
+        user = kwargs["user"]
+        return super().create(*args, **kwargs) if self.can_user_create(user) else None
+
+    def get_user_substitutes(self, user):
+        """Get user substitutes."""
+        return self.filter(user=user.id).count()
+
+    def can_user_create(self, user):
+        """Verify if the user can create a favorite."""
+        user_entries = self.get_user_substitutes(user)
+        return user_entries < 10 or user.is_premium
 
 
 class Substitutes(models.Model):
@@ -111,21 +125,7 @@ class Substitutes(models.Model):
         """Return str representation."""
         return f"{self.user} - {self.product} - {self.reference}"
 
-    def save_sub(self, prod_inst, ref_product, user):
-        """Save substitute in favorites."""
-        substitute = Substitutes.objects.create_substitute(user, prod_inst, ref_product)
-        return substitute
+    class Meta:
+        """Ordering ids."""
 
-    def delete_sub(self, product_sel, ref_product_id, status):
-        """Delete substitute from favorites."""
-        self.product_sel = product_sel
-        self.ref_product = ref_product_id
-
-        if not status:
-            substitute = Substitutes.objects.get(
-                product_id=int(self.product_sel),
-                reference_id=self.ref_product.id,
-                user_id=self.user.id,
-            )
-            substitute.delete()
-        return status
+        ordering = ["-product_id"]
