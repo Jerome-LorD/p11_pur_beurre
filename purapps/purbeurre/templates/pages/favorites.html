@@ -9,39 +9,49 @@
             <div class="prod-rep2" style="background-color: black; height: 200px; color: white;">
                 <h3>Mes favoris</h3>
             </div>
-
-
         </div>
-      
     </div>
 </section>
 {% endblock %}
 
 {% block content %}
+
 <section class="page-section bg-moules-frites min-height">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 text-center">
                 {% if user.is_authenticated %}
+
+                     {% if favorite.has_other_pages %}
+                        <p>Page {{ favorite.number }} sur {{ favorite.paginator.num_pages }}.</p>
+                        <hr class="divider" /> 
+                    {% endif %}  
                     <ul class="list-inline">
-                    {% for item in products %}
+                    {% for item in favorite %}
                         <li class="list-inline-item">
-                        <div id="fav-{{item.product.id}}">
-                        <a href="{% url 'product' item.product.name %}"><div class="pic-container">
-                        <img src="{{ item.product.image }}" class="img-fluid rounded">
-                        </div></a>
-                        <div class="p-name"><a class="p-ref" href="{% url 'product' item.reference.name %}">référence
-                        <span>
-                        substitut de <b>{{item.reference.name|truncatechars:40}}</b>
-                        </span></a>                        
-                            <p>{{item.product.name|truncatechars:30}}</p> 
-                        </div>
-                        <div class="p-save">
-                            <button type="submit" class="btn btn-outline-warning btn-sm" value="{{item.product.id}}">Retirer</button>
-                        </div><span class="nutriscore">{{item.product.nutriscore.type.capitalize}}</span></div>
+                            <div id="fav-{{item.product.id}}">
+                                <a href="{% url 'product' item.product.name %}"><div class="pic-container">
+                                <img src="{{ item.product.image }}" class="img-fluid rounded">
+                            </div></a>
+                            <div class="p-name"><a class="p-ref" href="{% url 'product' item.reference.name %}">référence
+                                <span>
+                                    substitut de <b>{{item.reference.name|truncatechars:40}}</b>
+                                </span></a>                        
+                                <p>{{item.product.name|truncatechars:30}}</p> 
+                            </div>
+                            <div class="p-save">
+                                <button type="submit" class="btn btn-outline-warning btn-sm" value="{{item.product.id}}">Retirer</button>
+                            </div><span class="nutriscore">{{item.product.nutriscore.type.capitalize}}</span>
+                            </div>
                         </li>
                     {% endfor %}
                     </ul>
+                    {% if favorite.has_previous %}
+                        <a  class="float-start btn btn-primary" href="?page={{ favorite.previous_page_number }}">page précédente</a>
+                    {% endif %}
+                    {% if favorite.has_next %}
+                        <a class="float-end btn btn-primary" href="?page={{ favorite.next_page_number }}">page suivante</a>
+                    {% endif %}   
                 {% endif %}
             </div>
         </div>
