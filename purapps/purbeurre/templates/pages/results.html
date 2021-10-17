@@ -4,7 +4,6 @@
 {% load extra_filters %}
 {% block title %}Substituts -- Pur beurre{% endblock title %}
 
-
 {% block results %}
 <section class="page-section bg-moules-frites" id="page-results">
     <div class="container px-4 px-lg-5 bg-primary">
@@ -22,7 +21,6 @@
 {% endblock results %}
 
 {% block content %}
-
 <section class="page-section bg-moules-frites min-height">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -59,7 +57,6 @@
                             <span class="nutriscore">{{product.nutriscore.type.capitalize}}</span>
                             </div>
                         </li>
-                        
                     {% endfor %}
                     </ul>
                     {% if page_no_result.has_previous %}
@@ -143,7 +140,7 @@
             </div>
         </div>
     </div>
-
+{% csrf_token %}
 <script src="{% static 'dist/js/get_substitutes.js' %}"></script>
 </section>
 {% endblock %}
