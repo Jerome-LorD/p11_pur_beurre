@@ -40,12 +40,12 @@ document.addEventListener('click', function (e) {
             "X-CSRFToken": csrftoken
             })
         let h3 = document.createElement("h3");
-        let h3_text = current_user + " est premium pur beurre !";
+        let h3_text = "Merci " + current_user + ", nous vous avons envoyé un mail de confirmation à " + email_current_user;
         let h3Content = document.createTextNode(h3_text);
         h3.appendChild(h3Content);
         document.querySelector("#prem").appendChild(h3);
-    } 
-}, false);
+    }
+}, {once: true});
 
 
 
