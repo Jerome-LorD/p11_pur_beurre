@@ -1,7 +1,12 @@
 """Purbeurre views module."""
 
 import json
-from django.http.response import Http404, JsonResponse, HttpResponse
+
+from django.http.response import (
+    Http404,
+    JsonResponse,
+    HttpResponse,
+)
 from django.shortcuts import render
 from purapps.purbeurre.models import Product, Substitutes
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
