@@ -33,13 +33,20 @@
                 <div id="prem"></div>
                 {% if user.is_premium %}
                 <div id="premium"><h3>{{ user.username|capfirst }} est premium pur beurre !</h3></div>
+                {% elif msg_confirmation %}
+                {{ msg_confirmation }}
                 {% else %}
                     <div class="btn-fiche">
                     <p>En tant que membre enregistré, vous pouvez placer 10 produits en favoris.<br>
                     Pour avoir un compte illimité, il suffit de</p>
-                        <button class="btn btn-primary" id="gift">Faire un don de 1€ symbolique</button>
+                        <button type="submit" class="btn btn-primary" id="gift">Faire un don de 1€ symbolique</button>
                     </div>
-                    <div id="gift-proposed"></div>
+                    <div>
+                    <form id="gift-proposed" method="post">
+                        {% csrf_token %}
+                        {{ request.premium_form }}
+                    </form>
+                    </div>
                 {% endif %}
             </div>
         </div>
