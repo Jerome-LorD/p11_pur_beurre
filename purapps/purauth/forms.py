@@ -2,6 +2,7 @@
 from django import forms
 from django.contrib.auth import forms as auth_forms
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 
 class UserCreationForm(auth_forms.UserCreationForm):
@@ -92,3 +93,30 @@ class NewLoginForm(auth_forms.UserCreationForm):
 
         model = get_user_model()
         fields = ("email", "password")
+
+
+class PremiumForm(forms.Form):
+    """Premium form."""
+
+    premium = forms.CharField(
+        label="",
+        max_length=1,
+        widget=forms.HiddenInput(
+            attrs={
+                "class": "form-control me-2",
+                "id": "confirm",
+                "placeholder": "",
+                "value": "1",
+            }
+        ),
+    )
+
+    def clean_premium(self):
+        """Clean premium."""
+        data = self.cleaned_data["premium"]
+
+        if data != "1":
+            raise ValidationError(
+                "You must not modify the default content of the value: 1"
+            )
+        return data
