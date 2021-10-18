@@ -109,10 +109,8 @@
         const autocomp_source = "{% url 'autocomplete' %}";
         const ajax_url_save_substitutes = "{% url 'save_substitute' %}";
         const ajax_url_delete_substitutes = "{% url 'delete_substitute' %}";
-
-        const ajax_url_premium = "{% url 'premium' %}";
         const current_user = '{{ user.username|capfirst }}';
-        {% comment %} const csrftoken = Cookies.get('csrftoken'); {% endcomment %}
+        const email_current_user = '{{ user.email }}';
     </script>
 
     {% comment %} <script src="{% static 'dist/js/get_substitutes.js' %}"></script> {% endcomment %}
